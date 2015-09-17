@@ -1,0 +1,167 @@
+/* Author: Natthakul Boonmee ID: 5710081 */
+
+import java.util.Scanner;
+
+public class StudentApp2 {
+
+	private static Scanner scan = new Scanner(System.in);
+
+	public static boolean add(String[] arr, String name) {
+		boolean added = false;
+		name = name.toUpperCase();
+		for (int i=0; i<arr.length; ++i) {
+			if (arr[i] == null) {
+				arr[i] = name;
+				added = true;
+				break;
+			}
+		}
+		return added;
+	}
+
+	public static boolean remove(String[] arr, String name) {
+		boolean removed = false;
+		name = name.toUpperCase();
+		int count = lookup(arr, name);
+		if (count != -1)
+			for (int i = 1; i < arr.length; ++i) {
+				if (arr[i].equals(name)) {
+					arr[i] = null;
+					removed = false;
+					break;
+				};
+			}
+		return removed;
+	}
+
+	public static int lookup(String[] arr,String input) {
+		int index = -1;
+		for (int i = 0; i < arr.length; ++i) {
+			if ((input == null && arr[i] == null) 
+					|| (arr[i] != null && arr[i].equalsIgnoreCase(input))) {
+				index = i;
+				break;
+			}
+		}
+		return index;
+	}
+	
+	public static void request(String[] arr) {
+		System.out.print("Enter index number: ");
+		int request = scan.nextInt();
+		if(arr[request] == null){
+			System.out.println("Invalid name or Null");
+		}
+		if(arr[request] != null){
+			 //name = name.toUpperCase();
+			System.out.println((arr[request]) +" is in box "+ "[" +request+"]");
+		}
+	}
+	
+	public static void search(String[] arr) {
+		System.out.print("Enter student's name to find: ");
+		Scanner scanner;
+		scanner = new Scanner(System.in);
+		String input = scanner.nextLine();
+		int index = lookup(arr, input);
+		if (index != -1) {
+			input = input.toUpperCase();
+			System.out.println("'" + input + "' is in index " + index);
+		} else {
+			System.out.println("'" + input + "' not found.");
+		}	
+	}
+
+	public static void update(String[] arr) {
+		System.out.print("Enter student's name to update: ");
+		Scanner scan = new Scanner(System.in);
+		String input_update = scan.nextLine();
+		int index = lookup(arr, input_update);
+
+		if(index != -1) {
+			input_update = input_update.toUpperCase();
+			System.out.println("Enter new name for '" + input_update + "': ");
+			String enter_update = scan.nextLine();
+			enter_update = enter_update.toUpperCase();
+			
+			arr[index] = enter_update;
+			System.out.println("'" + input_update + "' updated to '" + enter_update+ "'.");
+		} else {
+			System.out.println("'" + input_update + "' not found.");
+		}
+	}
+
+	public static void print(String[] arr) {
+		System.out.println("-----------------------");
+		System.out.println("List of names");
+		for (int i = 0; i < arr.length; ++i) {
+			System.out.println("[" + (i) + "]: " + arr[i]);
+		}
+		System.out.println("-----------------------");
+	}
+
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		System.out.print("Enter length of arrays (number): ");
+		int chk = scanner.nextInt();
+		String[] students = new String[chk];
+		
+
+		int choice;
+		do {
+			print(students);
+
+			System.out.println("1. Add new student");
+			System.out.println("2. Remove a student");
+			System.out.println("3. Update student record");
+			System.out.println("4. Find a student");
+			System.out.println("5. Request name");
+			System.out.println("6. Exit");
+			System.out.print("Enter a choice (1-6): ");
+			choice = scanner.nextInt();
+			scanner.nextLine();
+
+			if (choice == 1) {
+				//Check repeated name, block the same name.
+				System.out.print("Enter student's name: ");
+				String input = scanner.nextLine();
+
+				/**if(CheckDuplicateName(students, input)) {
+
+					System.out.println("'" + input + "' Name already exists.");
+				}*/
+				if (add(students, input)) {
+					input = input.toUpperCase();
+					System.out.println("'" + input + "' successfully added.");
+				} else {
+					System.out
+					.println("Unable to add new name. The array is full.");
+				}
+
+			} else if (choice == 2) {
+				System.out.print("Enter name to remove: ");
+				String input = scanner.nextLine();
+
+				if (remove(students, input)) {
+					System.out.println("'" + input + "' successfully removed.");
+				} else {
+					System.out.println("Unable to remove. Item not found.");
+				}
+
+			} else if (choice == 3) { // update student record. 
+				update(students);
+				print(students);
+			} else if (choice == 4) {// find a student.
+				search(students);
+			} else if (choice == 5) {// request name.
+				request(students);
+			} else if (choice == 6) {
+				System.out.println("Goodbye!");
+			} else {
+				System.out.println("Invalid choice. Please try again.");
+			}
+		} while (choice != 6);
+
+		scanner.close();
+	}
+}
