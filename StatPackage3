@@ -1,0 +1,224 @@
+/* Author: Natthakul Boonmee ID: 5710081 */
+import java.util.Scanner;
+
+public class StatPackage3 {
+	public static boolean add(double[] data, double x) {
+		boolean added = false;
+		for (int i = 0; i < data.length; ++i) {
+			if (data[i] == 0) {
+				data[i] = x;
+				added = true;
+				break;
+			}
+		}
+		return added;
+	}
+	
+	public static void input(double[] data) {
+		System.out.println("Input your data (separated by whitespace):");
+		Scanner scanner = new Scanner(System.in);
+		String input = scanner.nextLine();
+
+		String[] dataString = input.split("\\s");
+		for (int i = 0; i < dataString.length; ++i) {	
+//			if(data[0] == 0){  //if first digit is null -->
+//				System.out.println();
+//				break;
+//			}
+			if (!add(data, Double.parseDouble(dataString[i]))) {
+				break;
+			}
+		}
+	}
+
+	public static double findMax(double[] data) {
+		double max = data[0];
+		for (int i = 1; i < data.length; ++i) {
+			if (data[i] != 0 && max < data[i]) {
+				max = data[i];
+			}
+		}
+		return max;
+	}
+
+	public static double findMin(double[] data) {
+		double min = data[0];
+		for (int i = 1; i < data.length; ++i) {
+			if (data[i] != 0 && min > data[i]) {
+				min = data[i];
+			}
+		}
+		return min;
+	}
+
+	public static double findMean(double[] data) {
+		double sum = 0;
+		int count = 0;
+		for (int i = 0; i < data.length; ++i) {
+			if (data[i] != 0) {
+				sum += data[i];
+				++count;
+			}
+		}
+		return sum / count;
+	}
+
+	public static double findVar(double[] data) {
+		double xBar = findMean(data);
+		double sumSqr = 0;
+		int n = 0;
+
+		for (int i = 0; i < data.length; ++i) {
+			if (data[i] != 0) {
+				sumSqr += (data[i] - xBar) * (data[i] - xBar);
+				++n;
+			}
+		}
+		return sumSqr / (n - 1);
+	}
+
+	public static double findSD(double[] data) {
+		return Math.sqrt(findVar(data));
+	}
+
+	public static void sort(double[] data) {
+		for (int i = 0; i < data.length - 1; ++i) {
+			for (int j = 0; j < data.length - i - 1; ++j) {
+				if (data[j] > data[j + 1]) {
+					double tmp = data[j];
+					data[j] = data[j + 1];
+					data[j + 1] = tmp;
+				}
+			}
+		}
+	}
+
+	public static double findMedian(double[] data) {
+		double median = 0;
+		sort(data);
+		int start = 0;
+		for (int i = 0; i < data.length; ++i) {
+			if (data[i] != 0) {
+				start = i;
+				break;
+			}
+		}
+
+		int n = data.length - start;
+		if (n % 2 == 0) {
+			median = (data[(data.length + start) / 2] + data[((data.length + start) / 2) - 1]) / 2;
+		} else {
+			median = data[(data.length + start) / 2];
+		}
+		return median;
+	}
+
+	public static double findMode(double[] data) {
+		double mode = 0;
+		int maxF = 0;
+		sort(data);
+
+		double current = 0;
+		int currentF = 0;
+
+		for (int i = 0; i < data.length; ++i) {
+			if (data[i] != 0) {
+				if (data[i] != current) {
+
+					if (currentF > maxF) {
+						mode = current;
+						maxF = currentF;
+					}
+
+					current = data[i];
+					currentF = 1;
+
+				} else {
+					++currentF;
+				}
+			}
+		}
+		if (currentF > maxF) {
+			mode = current;
+			maxF = currentF;
+		}
+
+		return mode;
+	}
+
+	public static void print(double[] data) {
+		for (int i = 0; i < data.length; ++i) {
+			System.out.print(data[i] + " ");
+		}
+		System.out.println();
+	}
+	public static void ChangeDataArray(double[] data)
+	{
+		System.out.print("Enter size of array: ");
+		Scanner scan = new Scanner(System.in);
+		data = null;
+		int getarr = scan.nextInt();
+		data = new double[getarr];
+		System.out.println(getarr +" boxes"+ " was created !");
+		System.out.println();
+	}
+	
+	
+
+	public static void main(String[] args) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("Enter size of array: ");
+		int getarr = scan.nextInt();
+		double[] data = new double[getarr];
+		System.out.println(getarr +" boxes"+ " had been created !");
+		System.out.println();
+		int ch;
+		do {
+			System.out.println("1. Enter data");
+			System.out.println("2. Find the maximum");
+			System.out.println("3. Find the minimum");
+			System.out.println("4. Compute mean & standard deviation");
+			System.out.println("5. Compute median & mode");
+			System.out.println("6. Change size of array");
+			System.out.println("7. Exit");
+			System.out.print("Input your command: ");
+			ch = scan.nextInt();
+			scan.nextLine();
+			if (ch == 1) {
+				input(data);
+				print(data);
+			} else if (ch == 2) {
+				System.out.println("Maximum = " + findMax(data));
+			} else if (ch == 3) {
+				System.out.println("Minimum = " + findMin(data));
+			} else if (ch == 4) {
+				System.out.println("Mean = " + findMean(data));
+				System.out.println("Variance = " + findVar(data));
+				System.out.println("SD = " + findSD(data));
+			} else if (ch == 5) {
+				System.out.println("Median = " + findMedian(data));
+				System.out.println("Mode = " + findMode(data));
+			} else if (ch == 6) {//change size of array
+				System.out.print("Enter new size of array: ");
+				data = null;
+				getarr = scan.nextInt();
+				data = new double[getarr];
+				System.out.println(getarr +" boxes"+ " had been created !");
+				System.out.println();
+				
+			} else if (ch == 7) {
+				System.out.println("- ================== -");
+				System.out.println();
+				System.out.println();
+				System.out.println("\tGoodbye ~\t");
+				System.out.println();
+				System.out.println();
+				System.out.println("- ================== -");
+			} else {
+				System.out.println("Invalid command. Please try again.");
+			}
+		} while (ch != 7);
+
+	}
+
+}
